@@ -8,26 +8,34 @@ const Blacklist = require('../models/tokenBlacklist')
 async function handleUserSignUp(req, res) {
     const result = validationResult(req);
 
-    if(result.isEmpty()){
+    if(result.isEmpty()){   
         const body = req.body;
+
+        const isAlreadyExist = await User.findOne({ email: body.email });
+
+        if(isAlreadyExist){
+            return res.json({
+                message: 'user already exist'
+            })
+        }
 
         const hashedPassword = await User.hashPassword(body.password);
 
         const newUser = await User.create({
             fullname: {
-                firstname: body.firstname,
-                lastname: body.lastname
+                firstname: body.fullname.firstname,
+                lastname: body.fullname.lastname
             },
             email: body.email,
             password: hashedPassword
         })
 
-        console.log(newUser);
-
         const userToken = setToken(newUser);
 
         return res.status(201).cookie('token', userToken).json({
-            created: 'user created successfully!'
+            created: 'user created successfully!',
+            user: newUser,
+            token: userToken
         });
     }
 
@@ -51,7 +59,9 @@ async function handleUserLogin(req, res) {
                 const userToken = setToken(user);
 
                 return res.cookie('token', userToken).json({
-                    message: 'User logged in successfully!'
+                    message: 'User logged in successfully!',
+                    token: userToken,
+                    user: user
                 })
             }
         }

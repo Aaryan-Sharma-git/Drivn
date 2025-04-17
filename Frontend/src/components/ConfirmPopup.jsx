@@ -1,0 +1,115 @@
+import React, { useContext } from 'react'
+import axios from 'axios';
+import {captainContext} from '../context/CaptainContext'
+import { useNavigate } from 'react-router-dom';
+
+const ConfirmPopup = ({setConfirmPopupPanel, setPopupPanel, ride}) => {
+
+    const {Captain, setCaptain} = useContext(captainContext);
+    const navigate = useNavigate();
+
+    async function handleConfirmPopup() {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm-popup`, {
+                captainId : Captain._id,
+                rideId: ride._id
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                withCredentials: true
+            });
+
+            if(response.status === 200){
+                navigate('/captain-pickup', {state: {
+                    ride: response.data.ride
+                }});
+                console.log('popup confirmed');
+            }
+            else{
+                console.log('popup not confirmed');
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+  return (
+    <div className='w-full flex flex-col justify-start h-full gap-6 pt-4'>
+            <p className='text-3xl font-bold'>Confirm your ride!</p>
+            <div className='w-full flex justify-between items-center bg-amber-400 py-8 px-4 rounded-2xl'>
+                <div className='flex justify-start items-center gap-4'>
+                    <img className='w-[50px] h-[50px] rounded-full object-cover object-centre' src="https://t4.ftcdn.net/jpg/08/53/07/37/360_F_853073742_s0I2xKQU9I6aK3YUdQDMt9HL6rAuQLsQ.jpg" alt="" />
+                    <p className='text-xl font-bold capitalize'>{ride.user.fullname.firstname+' '+ride.user.fullname.lastname}</p>
+                </div>
+                <div className='flex flex-col justify-center items-start'>
+                    <p className='text-xl font-bold'><span>&#8377;</span>{ride.fare}</p>
+                    <p  className='text-md text-gray-600 font-semibold'>{ride.distance} KM</p>
+                </div>
+            </div>
+            <div className='flex flex-col w-full gap-4'>
+                <div className='flex gap-4 justify-start items-center w-full border-t border-gray-200 py-2'>
+                    <div className='flex justify-center items-center rounded-full'>
+                        <i className="ri-map-pin-range-fill text-xl"></i>
+                    </div>
+                    <div className='flex flex-col'>
+                        <p className='text-md text-gray-600 font-semibold'>Destination</p>
+                        <p className='text-lg font-medium'>{ride.destination}</p>
+                    </div>
+                </div>
+                <div className='flex gap-4 justify-start items-center w-full border-t border-gray-200 py-2'>
+                    <div className='flex justify-center items-center rounded-full'>
+                        <i className="ri-square-fill text-xl"></i>
+                    </div> 
+                    <div className='flex flex-col'>
+                        <p className='text-md text-gray-600 font-semibold'>Pick up</p>
+                        <p className='text-lg font-medium'>{ride.pickup}</p>
+                    </div>
+                </div>
+                <div className='flex gap-4 justify-start items-center w-full border-t border-gray-200 py-2'>
+                    <div className='flex justify-center items-center rounded-full'>
+                        <i className="ri-money-rupee-circle-fill text-xl"></i>
+                    </div> 
+                    <div className='flex flex-col'>
+                        <p className='text-md text-gray-600 font-semibold'>Mode of Payment</p>
+                        <p className='text-lg font-medium'>Cash</p>
+                    </div>
+                </div>
+                <div className='flex gap-4 justify-start items-center w-full border-t border-gray-200 py-2'>
+                    <div className='flex justify-center items-center rounded-full'>
+                        <i className="ri-bill-fill text-xl"></i>
+                    </div> 
+                    <div className='flex flex-col w-full gap-2'>
+                        <p className='text-md text-gray-600 font-semibold'>Total Bill</p>
+                        <div className='w-full flex flex-col'>
+                            <div className='flex justify-between'>
+                                <p className='font-medium'>To Uber</p>
+                                <p className='font-medium'><span>&#8377;</span>{ride.fare*0.3}</p>
+                            </div>
+                            <div className='flex justify-between'>
+                                <p className='font-medium'>Captain's Profit</p>
+                                <p className='font-medium'><span>&#8377;</span>{ride.fare*0.7}</p>
+                            </div>
+                            <div className='flex justify-between'>
+                                <p className='font-medium'>Total</p>
+                                <p className='font-medium'><span>&#8377;</span>{ride.fare}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className='w-full flex justify-end items-center gap-4'>
+                <button onClick={() => {
+                    setPopupPanel(false);
+                    setConfirmPopupPanel(false)
+                }} className='w-1/2 bg-red-600 text-white px-8 py-4 font-medium rounded-md flex justify-center items-center'>Decline</button>
+                <button onClick={handleConfirmPopup} className='w-1/2 bg-green-600 text-white px-8 py-4 font-medium rounded-md flex justify-center items-center'>Accept</button>
+            </div>  
+    </div>
+  )
+}
+
+export default ConfirmPopup

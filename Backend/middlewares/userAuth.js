@@ -21,7 +21,7 @@ async function checkForAuthentication(req, res, next) {
     }
 
     try {
-        const userId = await getToken(token);
+        const userId = getToken(token);
 
         const user = await User.findById(userId._id);
 
