@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 import DoubleTracking from '../components/DoubleTracking';
 import RidingPanel from '../components/RidingPanel';
 import axios from 'axios';
-import {socketContext} from '../context/socketContext';
+import {socketContext} from '../context/SocketContextt';
 
 
 const Riding = () => {
