@@ -93,7 +93,7 @@ const DoubleTracking = ({ destination }) => {
     let isMounted = true;
 
     if (navigator.geolocation) {
-      navigator.geolocation.watchPosition(
+      const watchId = navigator.geolocation.watchPosition(
         (position) => {
           if (position && position.coords && isMounted) {
             const { latitude, longitude } = position.coords;
