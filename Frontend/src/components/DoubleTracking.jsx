@@ -93,7 +93,7 @@ const DoubleTracking = ({ destination }) => {
     let isMounted = true;
 
     if (navigator.geolocation) {
-      const watchId = navigator.geolocation.watchPosition(
+      navigator.geolocation.watchPosition(
         (position) => {
           if (position && position.coords && isMounted) {
             const { latitude, longitude } = position.coords;
@@ -106,7 +106,6 @@ const DoubleTracking = ({ destination }) => {
 
       return () => {
         isMounted = false;
-        navigator.geolocation.clearWatch(watchId);
       };
     } else {
       console.error("Geolocation not supported by this browser.");
