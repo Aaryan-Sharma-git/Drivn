@@ -1,46 +1,59 @@
 import React, { useEffect, useRef, useState } from "react";
+import { loadGoogleMaps } from "../utility/loadGoogleMaps";
 
 const DoubleTracking = ({ destination }) => {
   const mapRef = useRef(null);
-  const mapInstanceRef = useRef(null); // NEW: store the map instance
+  const mapInstanceRef = useRef(null);
   const directionsRendererRef = useRef(null);
   const directionsServiceRef = useRef(null);
   const [origin, setOrigin] = useState();
 
-  // Initialize the map and DirectionsRenderer
   useEffect(() => {
-    if (!destination) return;
+    let isMounted = true;
 
     async function initMap() {
-      if (!mapRef.current) return;
+      if (!destination || !mapRef.current) return;
 
-      const { Map } = await google.maps.importLibrary("maps");
-      const { DirectionsService, DirectionsRenderer } = await google.maps.importLibrary("routes");
+      try {
+        const google = await loadGoogleMaps();
+        if (!isMounted) return;
 
-      const map = new Map(mapRef.current, {
-        zoom: 13,
-        center: destination,
-        disableDefaultUI: true,
-      });
+        const { Map } = await google.maps.importLibrary("maps");
+        const { DirectionsService, DirectionsRenderer } = await google.maps.importLibrary("routes");
 
-      mapInstanceRef.current = map; // store map instance
-      directionsServiceRef.current = new DirectionsService();
-      directionsRendererRef.current = new DirectionsRenderer();
-      directionsRendererRef.current.setMap(map); // bind to map here
+        const map = new Map(mapRef.current, {
+          zoom: 13,
+          center: destination,
+          disableDefaultUI: true,
+        });
+
+        mapInstanceRef.current = map;
+        directionsServiceRef.current = new DirectionsService();
+        directionsRendererRef.current = new DirectionsRenderer();
+        directionsRendererRef.current.setMap(map);
+      } catch (error) {
+        console.error("Failed to initialize map:", error);
+      }
     }
 
     initMap();
+
+    return () => {
+      isMounted = false;
+    };
   }, [destination]);
 
-  // Render directions once everything is ready
   useEffect(() => {
+    let isMounted = true;
+
     if (!origin || !destination) return;
 
     const tryRenderDirections = () => {
       if (
         !directionsServiceRef.current ||
         !directionsRendererRef.current ||
-        !mapInstanceRef.current
+        !mapInstanceRef.current ||
+        !isMounted
       ) {
         return false;
       }
@@ -54,8 +67,10 @@ const DoubleTracking = ({ destination }) => {
           travelMode: google.maps.TravelMode.DRIVING,
         })
         .then((response) => {
-          directionsRendererRef.current.setDirections(response);
-          console.log("✅ Route rendered");
+          if (isMounted) {
+            directionsRendererRef.current.setDirections(response);
+            console.log("✅ Route rendered");
+          }
         })
         .catch((error) => console.error("❌ Directions request failed", error));
 
@@ -68,22 +83,31 @@ const DoubleTracking = ({ destination }) => {
       }
     }, 200);
 
-    return () => clearInterval(intervalId);
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
   }, [origin, destination]);
 
-  // Track user's live location
   useEffect(() => {
+    let isMounted = true;
+
     if (navigator.geolocation) {
       const watchId = navigator.geolocation.watchPosition(
         (position) => {
-          const { latitude, longitude } = position.coords;
-          setOrigin({ lat: latitude, lng: longitude });
+          if (position && position.coords && isMounted) {
+            const { latitude, longitude } = position.coords;
+            setOrigin({ lat: latitude, lng: longitude });
+          }
         },
         (error) => console.error("Error getting position:", error),
         { enableHighAccuracy: true, maximumAge: 0 }
       );
 
-      return () => navigator.geolocation.clearWatch(watchId); // clean up
+      return () => {
+        isMounted = false;
+        navigator.geolocation.clearWatch(watchId);
+      };
     } else {
       console.error("Geolocation not supported by this browser.");
     }
