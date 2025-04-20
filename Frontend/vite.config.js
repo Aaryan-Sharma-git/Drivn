@@ -12,6 +12,6 @@ export default defineConfig({
     port: 5173,  // ✅ Ensure it's the same as the tunnel
     strictPort: true, // ✅ Ensures the exact port is used
     cors: true, // ✅ Enable CORS (useful if needed)
-    origin: "http://localhost:5173", // ✅ Explicitly allow tunnel URL
+    origin: "https://animated-beijinho-a700b5.netlify.app/", // ✅ Explicitly allow tunnel URL
   },
 })
