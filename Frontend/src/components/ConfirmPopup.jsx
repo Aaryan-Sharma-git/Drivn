@@ -40,35 +40,7 @@ const ConfirmPopup = ({setConfirmPopupPanel, setPopupPanel, ride}) => {
   return (
     <div className='w-full flex flex-col justify-start h-full gap-6 pt-4'>
             <p className='text-3xl font-bold'>Confirm your ride!</p>
-            <div className='w-full flex justify-between items-center bg-amber-400 py-8 px-4 rounded-2xl'>
-                <div className='flex justify-start items-center gap-4'>
-                    <img className='w-[50px] h-[50px] rounded-full object-cover object-centre' src="https://t4.ftcdn.net/jpg/08/53/07/37/360_F_853073742_s0I2xKQU9I6aK3YUdQDMt9HL6rAuQLsQ.jpg" alt="" />
-                    <p className='text-xl font-bold capitalize'>{ride.user.fullname.firstname+' '+ride.user.fullname.lastname}</p>
-                </div>
-                <div className='flex flex-col justify-center items-start'>
-                    <p className='text-xl font-bold'><span>&#8377;</span>{ride.fare}</p>
-                    <p  className='text-md text-gray-600 font-semibold'>{ride.distance} KM</p>
-                </div>
-            </div>
             <div className='flex flex-col w-full gap-4'>
-                <div className='flex gap-4 justify-start items-center w-full border-t border-gray-200 py-2'>
-                    <div className='flex justify-center items-center rounded-full'>
-                        <i className="ri-map-pin-range-fill text-xl"></i>
-                    </div>
-                    <div className='flex flex-col'>
-                        <p className='text-md text-gray-600 font-semibold'>Destination</p>
-                        <p className='text-lg font-medium'>{ride.destination}</p>
-                    </div>
-                </div>
-                <div className='flex gap-4 justify-start items-center w-full border-t border-gray-200 py-2'>
-                    <div className='flex justify-center items-center rounded-full'>
-                        <i className="ri-square-fill text-xl"></i>
-                    </div> 
-                    <div className='flex flex-col'>
-                        <p className='text-md text-gray-600 font-semibold'>Pick up</p>
-                        <p className='text-lg font-medium'>{ride.pickup}</p>
-                    </div>
-                </div>
                 <div className='flex gap-4 justify-start items-center w-full border-t border-gray-200 py-2'>
                     <div className='flex justify-center items-center rounded-full'>
                         <i className="ri-money-rupee-circle-fill text-xl"></i>
@@ -79,7 +51,7 @@ const ConfirmPopup = ({setConfirmPopupPanel, setPopupPanel, ride}) => {
                     </div>
                 </div>
                 <div className='flex gap-4 justify-start items-center w-full border-t border-gray-200 py-2'>
-                    <div className='flex justify-center items-center rounded-full'>
+                    <div className='flex ju`stify-center items-center rounded-full'>
                         <i className="ri-bill-fill text-xl"></i>
                     </div> 
                     <div className='flex flex-col w-full gap-2'>
@@ -87,11 +59,11 @@ const ConfirmPopup = ({setConfirmPopupPanel, setPopupPanel, ride}) => {
                         <div className='w-full flex flex-col'>
                             <div className='flex justify-between'>
                                 <p className='font-medium'>To Uber</p>
-                                <p className='font-medium'><span>&#8377;</span>{ride.fare*0.3}</p>
+                                <p className='font-medium'><span>&#8377;</span>{Math.floor(ride.fare*0.3)}</p>
                             </div>
                             <div className='flex justify-between'>
                                 <p className='font-medium'>Captain's Profit</p>
-                                <p className='font-medium'><span>&#8377;</span>{ride.fare*0.7}</p>
+                                <p className='font-medium'><span>&#8377;</span>{Math.ceil(ride.fare*0.7)}</p>
                             </div>
                             <div className='flex justify-between'>
                                 <p className='font-medium'>Total</p>
