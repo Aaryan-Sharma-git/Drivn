@@ -1,0 +1,27 @@
+.app{
+    background-color: white;
+    height: 100vh;
+    width: 100vw;
+}
+
+.topLvl{
+    height: 100vh;
+    width: 100vw;
+    background: #2A7B9B;
+    background: linear-gradient(90deg, rgba(42, 123, 155, 1) 0%, rgba(87, 199, 133, 1) 50%, rgba(237, 221, 83, 1) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (min-width: 430px) {
+    .app{
+        width: 430px;
+    }
+}
+
+@media (min-height: 932px) {
+    .app{
+        height: 932px;
+    }
+}

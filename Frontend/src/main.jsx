@@ -8,7 +8,7 @@ import 'remixicon/fonts/remixicon.css'
 import SocketContext from './context/SocketContextt.jsx';
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+    <StrictMode>
       <SocketContext>
         <CaptainContext>
           <UserContext>
@@ -16,6 +16,6 @@ createRoot(document.getElementById('root')).render(
           </UserContext>
         </CaptainContext>
       </SocketContext>
-  </StrictMode>,
+    </StrictMode>,
 )
 

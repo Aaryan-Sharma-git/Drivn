@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {captainContext} from '../context/CaptainContext';
+import {toast} from 'react-toastify'
 
 const CaptainLogin = () => {
 
@@ -27,25 +28,37 @@ const CaptainLogin = () => {
         password: Password
       }
 
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/login`, captainData, {
-        withCredentials: true
-      });
-
-      if(response.status === 200){
-        localStorage.setItem("token", response.data.token);
-        setCaptain(response.data.captain);
-        navigate('/captain-landing-page');
-      }
-      
-      setEmail('');
-      setPassword('');
+      try {
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/login`, captainData, {
+          withCredentials: true
+        });
   
-      console.log('Login successful!');
+        if(response.status === 200){
+          localStorage.setItem("token", response.data.token);
+          setCaptain(response.data.captain);
+          navigate('/captain-landing-page');
+  
+          setEmail('');
+          setPassword('');
+      
+          console.log('Login successful!');
+        }
+      } catch (error) {
+        if (error.response?.status === 400) {
+                            toast.error(error.response.data.errors[0].msg);
+                          } 
+                          else if (error.response?.status === 401) {
+                            toast.error("Invalid email or password");
+                          } 
+                          else {
+                            toast.error("An unexpected error occurred");
+                          }
+      }
     }
 
   return (
-    <div>
-      <div className='w-screen h-screen p-6 flex flex-col justify-between items-center'>
+    <div className='w-full h-full'>
+      <div className='w-full h-full p-6 flex flex-col justify-between items-center'>
         <div className='w-full'>
           <img className='w-20' src="https://pngimg.com/d/uber_PNG24.png" alt="UberIcon"/>
           <form className='mt-5 flex flex-col justify-center items-center gap-6' onSubmit={(e) => {

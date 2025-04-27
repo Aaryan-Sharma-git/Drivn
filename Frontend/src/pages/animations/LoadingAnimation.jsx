@@ -4,8 +4,8 @@ import loadingData from '../../assets/Animation - 1740230401419.json';
 
 const LoadingAnimation = () => {
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="w-[100px] h-[100px]">
+    <div className="flex justify-center items-center h-full">
+      <div className="w-[80px] h-[80px]">
         <Lottie animationData={loadingData} loop={true} autoPlay={true} />
       </div>
     </div>

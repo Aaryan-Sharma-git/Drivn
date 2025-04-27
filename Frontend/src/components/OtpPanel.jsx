@@ -44,7 +44,7 @@ const OtpPanel = ({otpPanel, ride}) => {
 
   return (
     <div className='relative w-full h-full flex flex-col justify-start py-40 gap-10'>
-      <p className='text-2xl text-center font-bold'>Enter OTP sent to +91 9893175463</p>
+      <p className='text-2xl text-center font-bold'>Enter OTP sent to the passenger</p>
 
       {otpPanel && <div className='w-full justify-center items-center'>
         <OtpTextarea length={4} handleOtpSubmit={handleOtpSubmit}/>

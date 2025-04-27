@@ -45,7 +45,7 @@ async function handleCaptainSignup(req, res) {
         });
     }
 
-    return res.send({
+    return res.status(400).send({
         errors: result.array()
     })
 }
@@ -64,7 +64,7 @@ async function handleCaptainLogin(req, res) {
             if(result){
                 const captainToken = setToken(captain);
 
-                return res.cookie('token', captainToken).json({
+                return res.status(200).cookie('token', captainToken).json({
                     message: 'captain logged in successfully!',
                     token: captainToken,
                     captain: captain
@@ -76,7 +76,7 @@ async function handleCaptainLogin(req, res) {
         })
     }
 
-    return res.send({
+    return res.status(400).send({
         errors: result.array()
     });
 }
@@ -96,7 +96,7 @@ async function handleCaptainLogout(req, res) {
 
 async function getCaptainProfile(req, res) {
     const captain = req.captain;
-    return res.json({
+    return res.status(200).json({
         captain: captain
     });
 }

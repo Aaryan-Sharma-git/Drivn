@@ -17,7 +17,7 @@ async function handleGetCoordinates(req, res) {
         }
     }
 
-    return res.send({
+    return res.status(400).send({
         error: result.array()
     })
     
@@ -45,7 +45,7 @@ async function handleGetDistanceTime(req, res) {
         }
     }
 
-    return res.send({
+    return res.status(400).send({
         error: result.array()
     })
 }
@@ -63,7 +63,7 @@ async function handleGetSuggestions(req, res) {
             console.log(error);
         }
     }
-    return res.send({
+    return res.status(400).send({
         error: result.array()
     })
 }

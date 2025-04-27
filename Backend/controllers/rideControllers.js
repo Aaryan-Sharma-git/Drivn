@@ -58,7 +58,7 @@ async function handleRideCreate(req, res) {
         }
     }
 
-    return res.send({
+    return res.status(400).send({
         error: result.array()
     }) 
     
@@ -82,7 +82,7 @@ async function handleRideFare(req, res) {
         }
     }
 
-    return res.send({
+    return res.status(400).send({
         error: result.array()
     })
 }
@@ -128,7 +128,7 @@ async function handleConfirmPopup(req, res) {
         }
     }
 
-    return res.send({
+    return res.status(400).send({
         error: result.array()
     })
 }
@@ -164,7 +164,7 @@ async function handleVerifyOtp(req, res) {
         }
     }
 
-    return res.send({
+    return res.status(400).send({
         error: result.array()
     })
 }
@@ -199,7 +199,7 @@ async function handleCompleteRide(req, res) {
         }
     }
 
-    return res.send({
+    return res.status(400).send({
         error: result.array()
     })
 }

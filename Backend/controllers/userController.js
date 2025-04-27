@@ -39,7 +39,7 @@ async function handleUserSignUp(req, res) {
         });
     }
 
-    return res.send({
+    return res.status(400).send({
         errors: result.array()
     })
 }
@@ -58,7 +58,7 @@ async function handleUserLogin(req, res) {
             if(result){
                 const userToken = setToken(user);
 
-                return res.cookie('token', userToken).json({
+                return res.status(200).cookie('token', userToken).json({
                     message: 'User logged in successfully!',
                     token: userToken,
                     user: user
@@ -70,7 +70,7 @@ async function handleUserLogin(req, res) {
         })
     }
 
-    return res.send({
+    return res.status(400).send({
         errors: result.array()
     });
 }
@@ -85,14 +85,14 @@ async function handleLogout(req, res) {
 
     console.log(BlacklistToken);
 
-    return res.clearCookie('token').json({
+    return res.status(200).clearCookie('token').json({
         message: 'User logged out successfully!'
     });
 }
 
 async function getUserProfile(req, res) {
     const user = req.user;
-    return res.json({
+    return res.status(200).json({
         user: user
     });
 }

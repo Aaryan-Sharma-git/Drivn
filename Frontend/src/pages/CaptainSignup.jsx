@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import {captainContext} from '../context/CaptainContext'
+import {captainContext} from '../context/CaptainContext';
+import {toast} from 'react-toastify'
 
 const CaptainSignup = () => {
 
@@ -69,30 +70,43 @@ const CaptainSignup = () => {
         }
 
 
-        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains`, captainData, {
-          withCredentials: true
-        });
-
-        if(response.status === 201){
-          localStorage.setItem("token", response.data.token);
-          setCaptain(response.data.captain);
-          navigate('/captain-landing-page');
+        try {
+          const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains`, captainData, {
+            withCredentials: true
+          });
+  
+          if(response.status === 201){
+            localStorage.setItem("token", response.data.token);
+            setCaptain(response.data.captain);
+            navigate('/captain-landing-page');
+  
+            setFirstname('');
+            setLastname('');
+            setEmail('');
+            setPassword('');
+            setColor('');
+            setVehicleNumber('');
+            setCapacity('');
+            setVehicleType('default');
+  
+            console.log('Registration successful!');
+          }
+        } catch (error) {
+          if (error.response?.status === 400) {
+                    toast.error(error.response.data.errors[0].msg); // e.g., "Password must contain at least 8 characters"
+                  } 
+                  else if (error.response?.status === 401) {
+                    toast.error("Invalid email or password");
+                  } 
+                  else {
+                    toast.error("An unexpected error occurred");
+                  }
         }
 
-        setFirstname('');
-        setLastname('');
-        setEmail('');
-        setPassword('');
-        setColor('');
-        setVehicleNumber('');
-        setCapacity('');
-        setVehicleType('default');
-
-        console.log('Registration successful!');
       }
   return (
-    <div>
-      <div className='w-screen h-screen p-6 flex flex-col justify-between items-center gap-10'>
+    <div className='w-full h-full'>
+      <div className='w-full h-full p-6 flex flex-col justify-between items-center gap-10'>
         <div className='w-full'>
           <img className='w-20' src="https://pngimg.com/d/uber_PNG24.png" alt="UberIcon"/>
           <form className=' flex flex-col justify-center items-center gap-6' onSubmit={(e) => {

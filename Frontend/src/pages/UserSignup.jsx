@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {userContext} from '../context/UserContext'
+import {toast} from 'react-toastify'
 
 const UserSignup = () => {
 
@@ -50,23 +51,30 @@ const UserSignup = () => {
           localStorage.setItem("token", response.data.token);
           setUser(response.data.user);
           navigate('/landing-page');
+          setFirstname('');
+          setLastname('');
+          setEmail('');
+          setPassword('');
+
+          console.log('Registration successful!');
         }
-
-        setFirstname('');
-        setLastname('');
-        setEmail('');
-        setPassword('');
-
-        console.log('Registration successful!');
       } 
       
       catch (error) {
-        console.log(error);
+        if (error.response?.status === 400) {
+          toast.error(error.response.data.errors[0].msg); // e.g., "Password must contain at least 8 characters"
+        } 
+        else if (error.response?.status === 401) {
+          toast.error("Invalid email or password");
+        } 
+        else {
+          toast.error("An unexpected error occurred");
+        }
       }
     }
   return (
-    <div>
-      <div className='w-screen h-screen p-6 flex flex-col justify-between items-center'>
+    <div className='w-full h-full'>
+      <div className='w-full h-full p-6 flex flex-col justify-between items-center'>
         <div className='w-full'>
           <img className='w-20' src="https://upload.wikimedia.org/wikipedia/commons/5/58/Uber_logo_2018.svg" alt="UberIcon"/>
           <form className='mt-5 flex flex-col justify-center items-center gap-6' onSubmit={(e) => {

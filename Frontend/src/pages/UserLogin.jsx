@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import {userContext} from '../context/UserContext'
+import {toast} from 'react-toastify'
 
 const UserLogin = () => {
 
@@ -21,6 +22,7 @@ const UserLogin = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
+    try{
     const userData = {
       email: Email,
       password: Password
@@ -28,29 +30,40 @@ const UserLogin = () => {
 
     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, userData, {
       withCredentials: true
-    });
+    })
 
     if(response.status === 200){
       localStorage.setItem("token", response.data.token);
       setUser(response.data.user);
       navigate('/landing-page');
-    }
-    setEmail('');
-    setPassword('');
+      setEmail('');
+      setPassword('');
 
-    console.log('Login successful!');
+      console.log('Login successful!');
+    }
+    }
+    catch(error){
+      if (error.response?.status === 400) {
+        toast.error(error.response.data.errors[0].msg); // e.g., "Password must contain at least 8 characters"
+      } 
+      else if (error.response?.status === 401) {
+        toast.error("Invalid email or password");
+      } 
+      else {
+        toast.error("An unexpected error occurred");
+      }
+    }
   }
 
   return (
-    <div>
-      <div className='w-screen h-screen p-6 flex flex-col justify-between items-center'>
+    <div className='w-full h-full'>
+      <div className='w-full h-full p-6 flex flex-col justify-between items-center'>
         <div className='w-full'>
           <img className='w-20' src="https://upload.wikimedia.org/wikipedia/commons/5/58/Uber_logo_2018.svg" alt="UberIcon"/>
           <form className='mt-5 flex flex-col justify-center items-center gap-6' onSubmit={(e) => {
             handleFormSubmit(e);
           }}>
             <div className='w-full flex flex-col gap-4'>
-
               <div className='flex flex-col gap-2.5'>
                 <label className='text-lg' htmlFor="userEmail">Enter your email</label>
                 <input className='bg-gray-200 px-6 py-4 rounded-md placeholder:text-md' value={Email} onChange={(e) => {
@@ -68,6 +81,7 @@ const UserLogin = () => {
             </div>
             <button className='w-full bg-black text-white px-8 py-4 font-medium rounded-md' type="submit">Login</button>  
           </form>
+
           <p className=' w-full text-center mt-2'>Don't have an account? <Link className='text-blue-500 text-md' to='/signup'>Create account</Link></p>
         </div>
         <Link to='/captain-login' className='w-full bg-green-600 text-white px-8 py-4 font-medium rounded-md flex justify-center items-center'>Login as Captain</Link>

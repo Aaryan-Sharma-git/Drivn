@@ -53,7 +53,7 @@ const CaptainPickup = () => {
       }, []);
 
   return (
-    <div className='w-screen h-screen flex flex-col overflow-hidden relative'>
+    <div className='w-full h-full flex flex-col overflow-hidden relative'>
         <div className='w-full flex-1 relative'>
             <img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Uber_logo_2018.svg" alt="uberIcon" className='absolute top-6 left-6 w-20 z-10'/>
             <Link to='/captain-landing-page' className='absolute flex justify-center items-center bg-white w-[50px] h-[50px] rounded-full left-4 bottom-4 z-10'><i className="ri-home-4-line text-xl"></i></Link>
