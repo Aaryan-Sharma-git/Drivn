@@ -21,18 +21,18 @@ const CaptainProgress = ({setPopupPanel}) => {
             <div className='flex justify-between gap-4 bg-gray-200 p-4 w-full rounded-2xl'>
                 <div className='flex flex-col justify-between items-center'>
                     <i className="ri-time-line text-3xl font-medium"></i>
-                    <p className='text-xl font-bold'>{(Captain.captainProgress.timeWorked).toFixed(2)}</p>
-                    <p className='text-gray-600'>Hours Online</p>
+                    <p className='text-xl font-bold text-center'>{(Captain.captainProgress.timeWorked).toFixed(2)}</p>
+                    <p className='text-gray-600 text-center'>Hours Online</p>
                 </div>
                 <div className='flex flex-col justify-between items-center'>
                     <i className="ri-speed-up-fill text-3xl font-medium"></i>
-                    <p className='text-xl font-bold'>{(Captain.captainProgress.distanceTravelled).toFixed(1)} KM</p>
-                    <p className='text-gray-600'>Total Distance</p>
+                    <p className='text-xl font-bold text-center'>{(Captain.captainProgress.distanceTravelled).toFixed(1)} KM</p>
+                    <p className='text-gray-600 text-center'>Total Distance</p>
                 </div>
                 <div className='flex flex-col justify-between items-center'>
                     <i className="ri-booklet-line text-3xl font-medium"></i>
-                    <p className='text-xl font-bold'>{Captain.captainProgress.jobsDone}</p>
-                    <p className='text-gray-600'>Total Jobs</p>
+                    <p className='text-xl font-bold text-center'>{Captain.captainProgress.jobsDone}</p>
+                    <p className='text-gray-600 text-center'>Total Jobs</p>
                 </div>
             </div>
         </div>
