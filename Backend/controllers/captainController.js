@@ -3,13 +3,15 @@ const Captain = require('../models/captainModel')
 const {
     setToken
 } = require('../services/jwt');
-const Blacklist = require('../models/tokenBlacklist')
+const Blacklist = require('../models/tokenBlacklist');
+const {fileUploading} = require('../cloudinary');
 
 async function handleCaptainSignup(req, res) {
     const result = validationResult(req);
 
     if(result.isEmpty()){
         const body = req.body;
+        const file = req.file;
 
         const isAlreadyExist = await Captain.findOne({ email: body.email });
 
@@ -20,6 +22,34 @@ async function handleCaptainSignup(req, res) {
         }
 
         const hashedPassword = await Captain.hashPassword(body.password);
+
+        if(file){
+            const response = await fileUploading(file.path);
+
+            const newCaptain = await Captain.create({
+                profilePic: response.secure_url,
+                fullname: {
+                    firstname: body.firstname,
+                    lastname: body.lastname
+                },
+                email: body.email,
+                password: hashedPassword,
+                vehicle: {
+                    color: body.color,
+                    vehicleNumber: body.vehicleNumber,
+                    capacity: body.capacity,
+                    vehicleType: body.vehicleType
+                }
+            })
+
+            const captainToken = setToken(newCaptain);
+
+            return res.status(201).cookie('token', captainToken).json({
+                created: 'captain created successfully!',
+                token: captainToken,
+                captain: newCaptain
+            });
+        }
 
         const newCaptain = await Captain.create({
             fullname: {

@@ -4,12 +4,14 @@ const {
     setToken
 } = require('../services/jwt');
 const Blacklist = require('../models/tokenBlacklist')
+const {fileUploading} = require('../cloudinary')
 
 async function handleUserSignUp(req, res) {
     const result = validationResult(req);
 
     if(result.isEmpty()){   
         const body = req.body;
+        const file = req.file;
 
         const isAlreadyExist = await User.findOne({ email: body.email });
 
@@ -21,10 +23,32 @@ async function handleUserSignUp(req, res) {
 
         const hashedPassword = await User.hashPassword(body.password);
 
+        if(file){
+            const response = await fileUploading(file.path);
+
+            const newUser = await User.create({
+                profilePic: response.secure_url,
+                fullname: {
+                    firstname: body.firstname,
+                    lastname: body.lastname
+                },
+                email: body.email,
+                password: hashedPassword
+            })
+
+            const userToken = setToken(newUser);
+
+            return res.status(201).cookie('token', userToken).json({
+                created: 'user created successfully!',
+                user: newUser,
+                token: userToken,   
+            });
+        }
+
         const newUser = await User.create({
             fullname: {
-                firstname: body.fullname.firstname,
-                lastname: body.fullname.lastname
+                firstname: body.firstname,
+                lastname: body.lastname
             },
             email: body.email,
             password: hashedPassword
@@ -35,7 +59,7 @@ async function handleUserSignUp(req, res) {
         return res.status(201).cookie('token', userToken).json({
             created: 'user created successfully!',
             user: newUser,
-            token: userToken
+            token: userToken,
         });
     }
 

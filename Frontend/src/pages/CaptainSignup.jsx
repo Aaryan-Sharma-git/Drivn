@@ -10,6 +10,7 @@ const CaptainSignup = () => {
       const [Password, setPassword] = useState('');
       const [Firstname, setFirstname] = useState('');
       const [Lastname, setLastname] = useState('');
+      const [file, setFile] = useState(null);
       const {captain, setCaptain} = useContext(captainContext);
 
       const [Color, setColor] = useState('');
@@ -18,6 +19,10 @@ const CaptainSignup = () => {
       const [VehicleType, setVehicleType] = useState('bike');
 
       const navigate = useNavigate();
+
+      const handleUploadPicture = (e) => {
+        setFile(e.target.files[0]);
+      }
   
       const handleCaptainFirstname = (e) => {
         setFirstname(e.target.value);
@@ -53,26 +58,25 @@ const CaptainSignup = () => {
     
       const handleFormSubmit = async (e) => {
         e.preventDefault();
-    
-        const captainData = {
-          fullname: {
-            firstname: Firstname,
-            lastname: Lastname
-          },
-          email: Email,
-          password: Password,
-          vehicle: {
-            color: Color,
-            vehicleNumber: VehicleNumber,
-            capacity: Capacity,
-            vehicleType: VehicleType
-          }
-        }
+
+        const formData = new FormData();
+        formData.append('firstname', Firstname);
+        formData.append('lastname', Lastname);
+        formData.append('email', Email);
+        formData.append('password', Password);
+        formData.append('profilePic', file);
+        formData.append('color', Color);
+        formData.append('vehicleNumber', VehicleNumber);
+        formData.append('capacity', Capacity);
+        formData.append('vehicleType', VehicleType);
 
 
         try {
-          const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains`, captainData, {
-            withCredentials: true
+          const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains`, formData, {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
           });
   
           if(response.status === 201){
@@ -113,6 +117,13 @@ const CaptainSignup = () => {
             handleFormSubmit(e);
           }}>
             <div className='w-full flex flex-col gap-4'>
+
+              <div className='flex flex-col gap-2.5'>
+                <label className='text-lg' htmlFor="userPicture">Upload your Picture</label>
+                <input className='bg-gray-200 px-6 py-4 rounded-md placeholder:text-md' onChange={(e) => {
+                  handleUploadPicture(e);
+                }} type='file' name="captainPicture" id="captainPicture" placeholder='upload your image here (optional)'/>
+              </div>
 
               <div className='flex flex-col gap-2.5'>
                 <p className='text-lg'>Enter your name</p>

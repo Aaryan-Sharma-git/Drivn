@@ -1,118 +1,77 @@
-import React, { useEffect, useRef, useState } from "react";
-import { loadGoogleMaps } from "../utility/loadGoogleMaps";
+import { useEffect, useRef, useState } from "react";
+import { loadGoogleMapsScript } from "../utils/loadGoogleMaps";
 
-const DoubleTracking = ({ destination }) => {
+function DoubleTracking({ destination }) {
   const mapRef = useRef(null);
-  const mapInstanceRef = useRef(null);
-  const directionsRendererRef = useRef(null);
-  const directionsServiceRef = useRef(null);
-  const [origin, setOrigin] = useState();
+  const [origin, setOrigin] = useState(null);
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
+  const [Destination, setDestination] = useState(destination);
 
+  // Load Google Maps script
   useEffect(() => {
-    let isMounted = true;
-
-    async function initMap() {
-      if (!destination || !mapRef.current) return;
-
-      try {
-        const google = await loadGoogleMaps();
-        if (!isMounted) return;
-
-        const { Map } = await google.maps.importLibrary("maps");
-        const { DirectionsService, DirectionsRenderer } = await google.maps.importLibrary("routes");
-
-        const map = new Map(mapRef.current, {
-          zoom: 13,
-          center: destination,
-          disableDefaultUI: true,
-        });
-
-        mapInstanceRef.current = map;
-        directionsServiceRef.current = new DirectionsService();
-        directionsRendererRef.current = new DirectionsRenderer();
-        directionsRendererRef.current.setMap(map);
-      } catch (error) {
-        console.error("Failed to initialize map:", error);
-      }
-    }
-
-    initMap();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [destination]);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    if (!origin || !destination) return;
-
-    const tryRenderDirections = () => {
-      if (
-        !directionsServiceRef.current ||
-        !directionsRendererRef.current ||
-        !mapInstanceRef.current ||
-        !isMounted
-      ) {
-        return false;
-      }
-
-      directionsRendererRef.current.setMap(mapInstanceRef.current);
-
-      directionsServiceRef.current
-        .route({
-          origin,
-          destination,
-          travelMode: google.maps.TravelMode.DRIVING,
-        })
-        .then((response) => {
-          if (isMounted) {
-            directionsRendererRef.current.setDirections(response);
-            console.log("✅ Route rendered");
-          }
-        })
-        .catch((error) => console.error("❌ Directions request failed", error));
-
-      return true;
-    };
-
-    const intervalId = setInterval(() => {
-      if (tryRenderDirections()) {
-        clearInterval(intervalId);
-      }
-    }, 200);
-
-    return () => {
-      isMounted = false;
-      clearInterval(intervalId);
-    };
-  }, [origin, destination]);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    if (navigator.geolocation) {
-      const watchId = navigator.geolocation.watchPosition(
-        (position) => {
-          if (position && position.coords && isMounted) {
-            const { latitude, longitude } = position.coords;
-            setOrigin({ lat: latitude, lng: longitude });
-          }
-        },
-        (error) => console.error("Error getting position:", error),
-        { enableHighAccuracy: true, maximumAge: 0 }
-      );
-
-      return () => {
-        isMounted = false;
-      };
-    } else {
-      console.error("Geolocation not supported by this browser.");
-    }
+    loadGoogleMapsScript()
+      .then(() => {
+        setIsScriptLoaded(true);
+      })
+      .catch((error) => {
+        console.error("Error loading Google Maps script:", error);
+      });
   }, []);
 
-  return <div ref={mapRef} className="w-full h-full"></div>;
-};
+  // Update user's current location
+  useEffect(() => {
+    const updateLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            const currentLocation = `${latitude},${longitude}`;
+            setOrigin(currentLocation);
+          },
+          (error) => {
+            console.warn("Error getting location:", error);
+          },
+          { enableHighAccuracy: true }
+        );
+      }
+    };
+
+    updateLocation();
+    const intervalId = setInterval(updateLocation, 10000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // Initialize map and directions
+  useEffect(() => {
+    if (!isScriptLoaded || !origin || !destination) return;
+
+    const directionsService = new window.google.maps.DirectionsService();
+    const directionsRenderer = new window.google.maps.DirectionsRenderer();
+    const map = new window.google.maps.Map(mapRef.current, {
+      zoom: 14,
+      center: { lat: 23.259933, lng: 77.412613 },
+    });
+
+    directionsRenderer.setMap(map);
+
+    directionsService
+      .route({
+        origin: origin,
+        destination: `${Destination.lat},${Destination.lng}`,
+        travelMode: window.google.maps.TravelMode.DRIVING,
+      })
+      .then((response) => {
+        directionsRenderer.setDirections(response);
+      })
+      .catch((e) => window.alert("Directions request failed due to " + e.message));
+  }, [isScriptLoaded, origin, Destination]);
+
+  return (
+    <div className="h-full w-full">
+      <div ref={mapRef} className="w-full h-full" />
+    </div>
+  );
+}
 
 export default DoubleTracking;

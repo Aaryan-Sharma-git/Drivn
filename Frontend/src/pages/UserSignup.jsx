@@ -10,8 +10,13 @@ const UserSignup = () => {
     const [Password, setPassword] = useState('');
     const [Firstname, setFirstname] = useState('');
     const [Lastname, setLastname] = useState('');
+    const [file, setFile] = useState(null);
     const {User, setUser} = useContext(userContext);
     const navigate = useNavigate();
+
+    const handleUploadPicture = (e) => {
+      setFile(e.target.files[0]);
+    }
 
     const handleUserFirstname = (e) => {
       setFirstname(e.target.value);
@@ -32,18 +37,19 @@ const UserSignup = () => {
     const handleFormSubmit = async (e) => {
       e.preventDefault();
 
-      const newUser = {
-        fullname: {
-          firstname: Firstname,
-          lastname: Lastname
-        },
-        email: Email,
-        password: Password
-      };
+      const formData = new FormData();
+      formData.append('firstname', Firstname);
+      formData.append('lastname', Lastname);
+      formData.append('email', Email);
+      formData.append('password', Password);
+      formData.append('profilePic', file);
 
       try {
-        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users`, newUser, {
-          withCredentials: true
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users`, formData, {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
         });
         console.log('Response:', response);
 
@@ -81,6 +87,13 @@ const UserSignup = () => {
             handleFormSubmit(e);
           }}>
             <div className='w-full flex flex-col gap-4'>
+
+            <div className='flex flex-col gap-2.5'>
+                <label className='text-lg' htmlFor="userPicture">Upload your Picture</label>
+                <input className='bg-gray-200 px-6 py-4 rounded-md placeholder:text-md' onChange={(e) => {
+                  handleUploadPicture(e);
+                }} type='file' name="userPicture" id="userPicture" placeholder='upload your image here (optional)'/>
+              </div>
 
               <div className='flex flex-col gap-2.5'>
                 <p className='text-lg'>Enter your name</p>

@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt')
 
 const userSchema = new mongoose.Schema({
+    profilePic: {
+        type: String,
+        default: 'https://res.cloudinary.com/dvkyzz0je/image/upload/v1745931696/sefifcecuqlvjnrbnn2e.jpg'
+    },
+
     fullname: {
         firstname: {
             type: String,

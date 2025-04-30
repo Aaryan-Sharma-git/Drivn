@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const captainSchema = new mongoose.Schema({
+    profilePic: {
+        type: String,
+        default: 'https://res.cloudinary.com/dvkyzz0je/image/upload/v1745931696/sefifcecuqlvjnrbnn2e.jpg'
+    },
+
     fullname: {
         firstname: {
             type: String,
@@ -59,6 +64,28 @@ const captainSchema = new mongoose.Schema({
             type: String,
             enum: ['car', 'bike', 'auto'],
             required: true,
+        }
+    },
+
+    captainProgress: {
+        timeWorked: {
+            type: Number,
+            default: 0
+        },
+
+        amountEarned: {
+            type: Number,
+            default: 0
+        },
+
+        jobsDone: {
+            type: Number,
+            default: 0
+        },
+
+        distanceTravelled: {
+            type: Number,
+            default: 0
         }
     },
 

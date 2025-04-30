@@ -28,7 +28,7 @@ const rideSchema = new mongoose.Schema({
     },
 
     distance: {
-        type: String,
+        type: Number,
     },
 
     duration: {
@@ -36,7 +36,7 @@ const rideSchema = new mongoose.Schema({
     },
 
     fare: {
-        type: String,
+        type: Number,
     },
 
     otp:{
@@ -49,6 +49,11 @@ const rideSchema = new mongoose.Schema({
         type: String,
         enum: ['pending', 'accepted', 'ongoing', 'completed', 'cancelled'],
         default: 'pending'
+    },
+
+    startedAt: {
+        type: Date,
+        default: Date.now
     },
 
     paymentId: {

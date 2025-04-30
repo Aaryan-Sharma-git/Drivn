@@ -71,9 +71,8 @@ const Riding = () => {
 
   return (
     <div className='w-full h-full relative flex flex-col overflow-hidden'>
-        <div className='w-full flex-1'>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Uber_logo_2018.svg" alt="uberIcon" className='absolute top-6 left-6 w-20 z-10'/>
-          <Link to='/landing-page' className='absolute flex justify-center items-center bg-white w-[50px] h-[50px] rounded-full right-4 top-4 z-10'><i className="ri-home-9-fill text-xl"></i></Link>
+        <div className='relative w-full flex-1'>
+          <Link to='/landing-page' className='absolute flex justify-center items-center bg-white w-[50px] h-[50px] rounded-full left-4 bottom-4 z-10'><i className="ri-home-9-fill text-xl"></i></Link>
           {destinationCoords && <DoubleTracking destination={destinationCoords}/>}
         </div>
 

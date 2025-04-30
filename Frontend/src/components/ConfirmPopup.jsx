@@ -3,7 +3,7 @@ import axios from 'axios';
 import {captainContext} from '../context/CaptainContext'
 import { useNavigate } from 'react-router-dom';
 
-const ConfirmPopup = ({setConfirmPopupPanel, setPopupPanel, ride}) => {
+const ConfirmPopup = ({setConfirmPopupPanel, setPopupPanel, ride, rides, setRides}) => {
 
     const {Captain, setCaptain} = useContext(captainContext);
     const navigate = useNavigate();
@@ -36,6 +36,15 @@ const ConfirmPopup = ({setConfirmPopupPanel, setPopupPanel, ride}) => {
             console.log(error);
         }
     }
+
+    const handleDecline = (rideId) => {
+        const updatedRides = rides.filter(ride => ride._id !== rideId);
+        setRides(updatedRides);
+
+        if(updatedRides.length === 0){
+            setPopupPanel(false);
+        }
+    } 
 
   return (
     <div className='w-full flex flex-col justify-start h-full gap-6 pt-4'>
@@ -75,8 +84,8 @@ const ConfirmPopup = ({setConfirmPopupPanel, setPopupPanel, ride}) => {
             </div>
             <div className='w-full flex justify-end items-center gap-4'>
                 <button onClick={() => {
-                    setPopupPanel(false);
-                    setConfirmPopupPanel(false)
+                    setConfirmPopupPanel(false);
+                    handleDecline(ride._id)
                 }} className='w-1/2 bg-red-600 text-white px-8 py-4 font-medium rounded-md flex justify-center items-center'>Decline</button>
                 <button onClick={handleConfirmPopup} className='w-1/2 bg-green-600 text-white px-8 py-4 font-medium rounded-md flex justify-center items-center'>Accept</button>
             </div>  

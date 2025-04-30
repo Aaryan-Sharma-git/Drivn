@@ -13,7 +13,8 @@ const CaptainLandingPage = () => {
 
   const [PopupPanel, setPopupPanel] = useState(false);
   const [confirmPopupPanel, setConfirmPopupPanel] = useState(false);
-  const [ride, setRide] = useState({});
+  const [rides, setRides] = useState([]);
+  const [selectedRide, setSelectedRide] = useState();
 
   const popupPanelRef = useRef();
   const confirmPopupRef = useRef();
@@ -91,8 +92,16 @@ const CaptainLandingPage = () => {
 
   useEffect(() => {
     if(socket){
-      socket.on('ride-confirm', (ride) => {
-        setRide(ride)
+      socket.on('ride-confirm', (newRide) => {
+        setRides((prevRides) => {
+          // check if ride already exists
+          const exists = prevRides.some(ride => ride._id === newRide._id);
+          if (!exists) {
+            return [...prevRides, newRide];
+          } else {
+            return prevRides; // don't add duplicate
+          }
+        });
         setPopupPanel(true);
       })
     }
@@ -104,24 +113,24 @@ const CaptainLandingPage = () => {
         <img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Uber_logo_2018.svg" alt="uberIcon" className='absolute top-6 left-6 w-20'/>
         <Link to='/captain/logout' className='absolute flex justify-center items-center bg-white w-[50px] h-[50px] rounded-full left-4 bottom-4 z-10'><i className="ri-logout-box-r-line text-xl"></i></Link>
         <SingleTracking/>   
-
       </div>
       <div className='w-full p-6'>
-        <CaptainProgress/>
+        <CaptainProgress setPopupPanel={setPopupPanel} />
       </div>
 
-      <div ref={popupPanelRef} className='absolute w-full bottom-0 translate-y-full bg-white z-10 p-6 rounded-t-2xl flex flex-col justify-center items-center'>
+      <div ref={popupPanelRef} className="absolute w-full bottom-0 max-h-[80%] translate-y-full bg-white z-10 py-6 rounded-t-2xl flex flex-col items-center overflow-hidden">
+
         {PopupPanel && <div className=' w-full flex justify-center items-center absolute top-0' onClick={() => {
             setPopupPanel(false);
           }}><i className="ri-arrow-down-wide-line text-4xl text-gray-300"></i></div>}
-        {PopupPanel &&<Popup setPopupPanel={setPopupPanel} setConfirmPopupPanel={setConfirmPopupPanel} ride={ride} />}
+        {PopupPanel &&<Popup setPopupPanel={setPopupPanel} setConfirmPopupPanel={setConfirmPopupPanel} rides={rides} setSelectedRide={setSelectedRide} setRides = {setRides} />}
       </div>
 
       <div ref={confirmPopupRef} className='absolute w-full h-full bottom-0 translate-y-full bg-white z-10 p-6 flex flex-col  justify-center items-center'>
         {confirmPopupPanel && <div className=' w-full flex justify-center items-center absolute top-0' onClick={() => {
             setConfirmPopupPanel(false);
           }}><i className="ri-arrow-down-wide-line text-4xl text-gray-300"></i></div>}
-        {confirmPopupPanel && <ConfirmPopup setPopupPanel={setPopupPanel} setConfirmPopupPanel={setConfirmPopupPanel} ride={ride} />}
+        {confirmPopupPanel && <ConfirmPopup setPopupPanel={setPopupPanel} setConfirmPopupPanel={setConfirmPopupPanel}  ride ={selectedRide} rides={rides} setRides={setRides} />}
       </div>
 
     </div>

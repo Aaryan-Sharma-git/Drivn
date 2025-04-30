@@ -27,9 +27,9 @@ async function handleRideCreate(req, res) {
                 pickup: body.pickup,
                 destination: body.destination,
                 vehicleType: body.vehicleType,
-                distance: (distanceTime.distanceMeters)/1000,
+                distance: Number((distanceTime.distanceMeters)/1000),
                 duration: (Number(newDuration)/60).toFixed(2),
-                fare: fare[body.vehicleType],
+                fare: Number(fare[body.vehicleType]),
                 otp: otp,
             })
 
@@ -180,9 +180,18 @@ async function handleCompleteRide(req, res) {
             const rideCompleted = await Ride.findByIdAndUpdate(body.ride._id, {
                 status: 'completed'
             });
+
+            const timeWorkedByCaptain = (Date.now() - populatedRide.startedAt)/(1000 * 60 * 60);
+
             const captainInactive = await Captain.findByIdAndUpdate(populatedRide.captain._id, {
-                status: 'InActive'
-            })
+                status: 'InActive',
+                captainProgress: {
+                    timeWorked: timeWorkedByCaptain,
+                    amountEarned: (populatedRide.captain.captainProgress.amountEarned + populatedRide.fare),
+                    jobsDone: (populatedRide.captain.captainProgress.jobsDone + 1),
+                    distanceTravelled: Number(populatedRide.captain.captainProgress.distanceTravelled + populatedRide.distance)
+                }
+            });
 
             if(io){
                 io.to(populatedRide.user.socketId).emit('complete-ride', 200);
@@ -192,7 +201,8 @@ async function handleCompleteRide(req, res) {
             }
 
             return res.status(200).json({
-                msg: 'ride was successful'
+                msg: 'ride was successful',
+                captain: captainInactive
             })
         } catch (error) {
             console.log(error);

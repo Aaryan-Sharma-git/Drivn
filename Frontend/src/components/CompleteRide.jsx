@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Done from './animation/Done'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {captainContext} from '../context/CaptainContext'
 
 const CompleteRide = ({ride}) => {
 
     const [playAnimation, setPlayAnimation] = useState(false);
+    const {Captain, setCaptain} = useContext(captainContext)
 
     const navigate = useNavigate();
 
@@ -23,6 +25,7 @@ const CompleteRide = ({ride}) => {
             })
 
             if(response.status === 200){
+                setCaptain(response.data.captain)
                 setPlayAnimation(true);
                 setTimeout(() => {
                     navigate('/captain-landing-page')

@@ -1,81 +1,75 @@
-import React, { useEffect, useRef } from 'react';
-import { loadGoogleMaps } from '../utility/loadGoogleMaps';
+import { useEffect, useRef, useState } from "react";
+import { loadGoogleMapsScript } from "../utils/loadGoogleMaps";
 
-const SingleTracking = () => {
-  const mapRef = useRef();
-  const mapInstance = useRef(null);
-  const markerInstance = useRef(null);
+function SingleTracking() {
+  const mapRef = useRef(null);
+  const [origin, setOrigin] = useState(null);
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
+  // Load Google Maps script
   useEffect(() => {
-    let isMounted = true;
+    loadGoogleMapsScript()
+      .then(() => {
+        setIsScriptLoaded(true)
+      })
+      .catch((error) => {
+        console.error("Error loading Google Maps script:", error);
+      });
+  }, []);
+
+  // Update user's current location
+  useEffect(() => {
+    const updateLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            const currentLocation = { lat: latitude, lng: longitude };
+            setOrigin(currentLocation);
+          },
+          (error) => {
+            console.warn("Error getting location:", error);
+          },
+          { enableHighAccuracy: true }
+        );
+      }
+    };
+
+    updateLocation();
+    const intervalId = setInterval(updateLocation, 10000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // Initialize map and marker
+  useEffect(() => {
+    if (!isScriptLoaded || !origin) return;
 
     async function initMap() {
-      try {
-        const google = await loadGoogleMaps();
-        if (!isMounted) return;
+      const { Map } = await window.google.maps.importLibrary("maps");
+      const { AdvancedMarkerElement } = await window.google.maps.importLibrary("marker");
 
-        const { Map } = await google.maps.importLibrary("maps");
-        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+      const map = new Map(mapRef.current, {
+        zoom: 14,
+        center: origin,
+        mapId: import.meta.env.VITE_GOOGLE_MAPS_MAP_ID,
+      });
 
-        mapInstance.current = new Map(mapRef.current, {
-          center: { lat: 23.267080, lng: 77.383278 },
-          zoom: 13,
-          mapId: import.meta.env.VITE_GOOGLE_MAPS_MAP_ID,
-        });
-
-        markerInstance.current = new AdvancedMarkerElement({
-          map: mapInstance.current,
-          position: { lat: 23.267080, lng: 77.383278 },
-          title: "Bhopal",
-        });
-
-        getUserLocation();
-      } catch (error) {
-        console.error("Failed to initialize map:", error);
-      }
+      const marker = new AdvancedMarkerElement({
+        map: map,
+        position: origin,
+        title: "Current Location",
+      });
     }
 
     initMap();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  function getUserLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.watchPosition(
-        (position) => {
-          if (position && position.coords) {
-            const { latitude, longitude } = position.coords;
-            updateLocation(latitude, longitude);
-          } else {
-            console.error("Invalid position data received:", position);
-          }
-        },
-        (error) => {
-          console.error("Geolocation error:", error);
-        },
-        { enableHighAccuracy: true }
-      );
-    } else {
-      console.log("Geolocation is not supported by this browser.");
-    }
-  }
-
-  function updateLocation(lat, lng) {
-    if (mapInstance.current && markerInstance.current) {
-      const newPosition = { lat, lng };
-      mapInstance.current.setCenter(newPosition);
-      markerInstance.current.position = newPosition;
-    } else {
-      console.log('Map or marker instance is not created.');
-    }
-  }
+  }, [isScriptLoaded, origin]);
 
   return (
-    <div ref={mapRef} className='w-full h-full'></div>
+    <div className="h-full w-full">
+      <div ref={mapRef} className="w-full h-full" />
+    </div>
   );
-};
+}
 
 export default SingleTracking;

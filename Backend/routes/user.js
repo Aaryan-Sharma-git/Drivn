@@ -9,11 +9,12 @@ const {
 const {body} = require('express-validator');
 const {
     checkForAuthentication
-} = require('../middlewares/userAuth')
+} = require('../middlewares/userAuth');
+const upload = require('../middlewares/multer')
 
 
 userRouter
-.post('/',  body('fullname.firstname').notEmpty().isLength({ min: 3 }).withMessage('Name must contain atleast 3 characters'),
+.post('/', upload.single('profilePic'),  body('firstname').notEmpty().isLength({ min: 3 }).withMessage('Name must contain atleast 3 characters'),
             body('email').notEmpty().isEmail().withMessage('Invalid Email'),
             body('password').notEmpty().isLength({ min: 8 }).withMessage('Password must contain atleast 8 characters'),
 handleUserSignUp);

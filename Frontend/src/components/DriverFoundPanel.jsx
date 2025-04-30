@@ -8,7 +8,7 @@ const DriverFoundPanel = ({chosenVehicle, otp, pickup, destination, vehicleType,
             <div className='flex justify-between items-center'>
                 <div className='relative flex justify-center items-center'>
                     <img className='w-[160px]' src={chosenVehicle || 'https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,w_956,h_638/v1555367310/assets/30/51e602-10bb-4e65-b122-e394d80a9c47/original/Final_UberX.png'} alt="" />
-                    <img src="https://media.istockphoto.com/id/464565934/photo/smiling-south-asian-bearded-male.jpg?s=612x612&w=0&k=20&c=uKyudyjQOAiqccBZ73UTgC944AA26iY1Z4VADwKmNH0=" alt="" className='w-[70px] h-[70px] object-cover rounded-full absolute z-20 left-0'/>
+                    <img src={ride.captain.profilePic} alt="" className='w-[70px] h-[70px] object-cover rounded-full absolute z-20 left-0'/>
                 </div>
                 <div className='flex flex-col justify-center items-end'>
                     <p className='text-lg font-semibold capitalize'>{ride.captain.fullname.firstname+' '+ride.captain.fullname.lastname}</p>
