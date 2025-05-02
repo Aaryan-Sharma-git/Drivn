@@ -186,7 +186,7 @@ async function handleCompleteRide(req, res) {
             const captainInactive = await Captain.findByIdAndUpdate(populatedRide.captain._id, {
                 status: 'InActive',
                 captainProgress: {
-                    timeWorked: timeWorkedByCaptain,
+                    timeWorked: (timeWorkedByCaptain + populatedRide.captain.captainProgress.timeWorked),
                     amountEarned: (populatedRide.captain.captainProgress.amountEarned + populatedRide.fare),
                     jobsDone: (populatedRide.captain.captainProgress.jobsDone + 1),
                     distanceTravelled: Number(populatedRide.captain.captainProgress.distanceTravelled + populatedRide.distance)
