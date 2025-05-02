@@ -10,6 +10,7 @@ function initializeServer(server){
         io = new Server(server, {
             cors: {
                 origin: process.env.FRONTEND_BASE_URL,
+                methods: ["GET", "POST"],
                 credentials: true
             }
         });
