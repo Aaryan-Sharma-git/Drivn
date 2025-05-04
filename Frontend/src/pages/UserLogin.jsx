@@ -59,7 +59,7 @@ const UserLogin = () => {
     <div className='w-full h-full'>
       <div className='w-full h-full p-6 flex flex-col justify-between items-center'>
         <div className='w-full'>
-          <img className='w-20' src="https://upload.wikimedia.org/wikipedia/commons/5/58/Uber_logo_2018.svg" alt="UberIcon"/>
+          <img className='w-20' src="/Drivn-1-removebg-preview (1).png" alt="UberIcon"/>
           <form className='mt-5 flex flex-col justify-center items-center gap-6' onSubmit={(e) => {
             handleFormSubmit(e);
           }}>

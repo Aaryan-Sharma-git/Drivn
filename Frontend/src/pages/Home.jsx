@@ -6,14 +6,14 @@ const Home = () => {
   return (
     <div className='w-full h-full'>
       <div className='w-full h-full flex flex-col justify-center relative'>
-        <img className='w-20 absolute left-6 top-6' src="https://upload.wikimedia.org/wikipedia/commons/5/58/Uber_logo_2018.svg" alt="UberIcon"/>
+        <img className='w-20 absolute left-6 top-6' src="/Drivn-1-removebg-preview (1).png" alt="UberIcon"/>
 
         <div className='bg-red-400 w-full h-[75%] bg-[url(https://images.unsplash.com/photo-1587307293162-2fb7a3ebfc75?q=80&w=1984&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)] bg-cover bg-center'>
         </div>
 
         <div className='flex flex-col justify-between w-full h-[25%] p-6'>
 
-          <p className='text-3xl font-bold'>Get started with Uber</p>
+          <p className='text-3xl font-bold'>Get started with Drivn</p>
 
           <Link to='/login' className='w-full bg-black text-white py-4 px-8 font-medium rounded-md flex items-center'>
 

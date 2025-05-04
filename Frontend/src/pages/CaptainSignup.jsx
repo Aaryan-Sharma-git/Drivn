@@ -15,7 +15,7 @@ const CaptainSignup = () => {
 
       const [Color, setColor] = useState('');
       const [VehicleNumber, setVehicleNumber] = useState('');
-      const [Capacity, setCapacity] = useState('');
+      const [Capacity, setCapacity] = useState(1);
       const [VehicleType, setVehicleType] = useState('bike');
 
       const navigate = useNavigate();
@@ -48,12 +48,17 @@ const CaptainSignup = () => {
         setVehicleNumber(e.target.value);
       }
 
-      const handleVehicleCapacity = (e) => {
-        setCapacity(e.target.value);
-      }
-
       const handleVehicleType = (e) => {
         setVehicleType(e.target.value);
+        if(e.target.value === "bike"){
+          setCapacity(1);
+        }
+        else if(e.target.value === "car"){
+          setCapacity(4)
+        }
+        else{
+          setCapacity(3)
+        }
       }
     
       const handleFormSubmit = async (e) => {
@@ -112,8 +117,8 @@ const CaptainSignup = () => {
     <div className='w-full h-full'>
       <div className='w-full h-full p-6 flex flex-col justify-between items-center gap-10'>
         <div className='w-full'>
-          <img className='w-20' src="https://pngimg.com/d/uber_PNG24.png" alt="UberIcon"/>
-          <form className=' flex flex-col justify-center items-center gap-6' onSubmit={(e) => {
+          <img className='w-20' src="/D2rivn-1-removebg-preview (1).png" alt="UberIcon"/>
+          <form className='mt-5 flex flex-col justify-center items-center gap-6' onSubmit={(e) => {
             handleFormSubmit(e);
           }}>
             <div className='w-full flex flex-col gap-4'>
@@ -163,9 +168,7 @@ const CaptainSignup = () => {
                     }} type="text" name="vehicleNumber" id="vehicleNumber" placeholder='Vehicle Number'/>
                   </div>
                   <div className='flex gap-4'>
-                    <input className='bg-gray-200 px-6 py-4 rounded-md w-1/2 placeholder:text-md' value={Capacity} onChange={(e) => {
-                      handleVehicleCapacity(e);
-                    }} type='number' name="capacity" id="capacity" placeholder='Capacity'/>
+                    <input className='bg-gray-200 px-6 py-4 rounded-md w-1/2 placeholder:text-md' value={Capacity} type='text' name="capacity" id="capacity" placeholder='Capacity' disabled/>
                     <select name="vehicleType" id="vehicleType" className='bg-gray-200 px-6 py-4 rounded-md w-1/2 test-md' value={VehicleType} onChange={(e) => {
                       handleVehicleType(e);
                     }} placeholder="choose type">

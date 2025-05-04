@@ -5,7 +5,7 @@ const RidingPanel = ({ride}) => {
     <div className='w-full flex flex-col justify-start gap-4 h-full pt-4'>
             <div className='flex justify-between items-center'>
                 <div className='flex justify-center items-center'>
-                    <img src="https://media.istockphoto.com/id/464565934/photo/smiling-south-asian-bearded-male.jpg?s=612x612&w=0&k=20&c=uKyudyjQOAiqccBZ73UTgC944AA26iY1Z4VADwKmNH0=" alt="" className='w-[70px] h-[70px] object-cover rounded-full'/>
+                    <img src={ride.captain.profilePic} alt="" className='w-[70px] h-[70px] object-cover rounded-full'/>
                 </div>
                 <div className='flex flex-col justify-center items-end'>
                     <p className='text-lg font-semibold capitalize'>{ride.captain.fullname.firstname+' '+ride.captain.fullname.lastname}</p>

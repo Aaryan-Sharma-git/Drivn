@@ -13,10 +13,10 @@ const VehiclePanel = ({fare, setConfirmRidePanelOpen, setChosenVehicle, setVehic
             <img className='h-14' src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,w_956,h_638/v1555367310/assets/30/51e602-10bb-4e65-b122-e394d80a9c47/original/Final_UberX.png" alt="" />
             <div className='flex flex-col'>
               <div className='flex gap-2'>
-                <p className='text-xl font-bold'>UberGo</p>
+                <p className='text-xl font-bold'>DrivnGo</p>
                 <div><i className="ri-user-fill"></i>4</div>
               </div>
-              <p className='font-medium'>{`2 mins away`}</p>
+              <p className='font-medium'>{`10 mins away`}</p>
               <p className='text-gray-600'>Affordable compact rides</p>
             </div>
             <div className='text-xl font-bold'><span>&#8377;</span>{fare.car}</div>
@@ -32,7 +32,7 @@ const VehiclePanel = ({fare, setConfirmRidePanelOpen, setChosenVehicle, setVehic
                 <p className='text-xl font-bold'>Moto</p>
                 <div><i className="ri-user-fill"></i>1</div>
               </div>
-              <p className='font-medium'>{`2 mins away`}</p>
+              <p className='font-medium'>{`5 mins away`}</p>
               <p className='text-gray-600'>Affordable motorcycle rides</p>
             </div>
             <div className='text-xl font-bold'><span>&#8377;</span>{fare.bike}</div>
@@ -45,10 +45,10 @@ const VehiclePanel = ({fare, setConfirmRidePanelOpen, setChosenVehicle, setVehic
             <img className='h-14' src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1648431773/assets/1d/db8c56-0204-4ce4-81ce-56a11a07fe98/original/Uber_Auto_558x372_pixels_Desktop.png" alt="" />
             <div className='flex flex-col'>
               <div className='flex gap-2'>
-                <p className='text-xl font-bold'>UberAuto</p>
+                <p className='text-xl font-bold'>DrivnAuto</p>
                 <div><i className="ri-user-fill"></i>3</div>
               </div>
-              <p className='font-medium'>{`3 mins away`}</p>
+              <p className='font-medium'>{`7 mins away`}</p>
               <p className='text-gray-600'>Affordable rikshaw rides</p>
             </div>
             <div className='text-xl font-bold'><span>&#8377;</span>{fare.auto}</div>

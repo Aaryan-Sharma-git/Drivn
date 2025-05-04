@@ -110,7 +110,7 @@ const CaptainLandingPage = () => {
   return (
     <div className='w-full h-full flex flex-col overflow-hidden relative'>
       <div className='w-full relative flex-1'>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Uber_logo_2018.svg" alt="uberIcon" className='absolute top-6 left-6 w-20'/>
+        <img src="/D2rivn-1-removebg-preview (1).png" alt="uberIcon" className='absolute top-6 left-6 w-20'/>
         <Link to='/captain/logout' className='absolute flex justify-center items-center bg-white w-[50px] h-[50px] rounded-full left-4 bottom-4 z-10'><i className="ri-logout-box-r-line text-xl"></i></Link>
         <SingleTracking/>   
       </div>
