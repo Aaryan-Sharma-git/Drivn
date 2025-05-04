@@ -53,6 +53,9 @@ This backend is designed to support a ride-hailing application, providing functi
    JWT_SECRET=your_jwt_secret
    GOOGLE_MAPS_API_KEY=your_google_maps_api_key
    FRONTEND_BASE_URL=your_frontend_base_url
+   CLOUDINARY_CLOUD_NAME=clodinary_name
+   CLOUDINARY_API_KEY=cloudinary_api_key
+   CLOUDINARY_API_SECRET=cloudinary_api_secret
    ```
 
    - **MONGO_URL**: MongoDB connection string.
