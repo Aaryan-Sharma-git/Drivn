@@ -1,4 +1,4 @@
-# Uber Application - Backend API Documentation
+# Drivn Application - Backend API Documentation
 
 ## Overview
 
@@ -19,6 +19,8 @@ This backend is designed to support a ride-hailing application, providing functi
 11. **Cookie-Parser**: For parsing cookies in HTTP requests.
 12. **Cors**: Middleware for enabling Cross-Origin Resource Sharing.
 13. **Dotenv**: For managing environment variables securely.
+14. **Multer**: For uploading file on backend.
+15. **Cloudinary**: For uploading file from backend to cloud.
 
 ## How to Run the Backend
 
@@ -51,6 +53,9 @@ This backend is designed to support a ride-hailing application, providing functi
    JWT_SECRET=your_jwt_secret
    GOOGLE_MAPS_API_KEY=your_google_maps_api_key
    FRONTEND_BASE_URL=your_frontend_base_url
+   CLOUDINARY_CLOUD_NAME=clodinary_name
+   CLOUDINARY_API_KEY=cloudinary_api_key
+   CLOUDINARY_API_SECRET=cloudinary_api_secret
    ```
 
    - **MONGO_URL**: MongoDB connection string.
@@ -58,6 +63,9 @@ This backend is designed to support a ride-hailing application, providing functi
    - **JWT_SECRET**: Secret key for signing JWT tokens.
    - **GOOGLE_MAPS_API_KEY**: API key for Google Maps services.
    - **FRONTEND_BASE_URL**: URL of the frontend application for CORS configuration.
+   - **CLOUDINARY_CLOUD_NAME**: Cloudninary cloud name.
+   - **CLOUDINARY_API_KEY**: Cloudinary API key.
+   - **CLOUDINARY_API_SECRET**: Secret string for cloudinary.
 
 4. Start the server:
 

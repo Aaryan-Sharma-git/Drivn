@@ -1,4 +1,4 @@
-# Uber - Frontend
+# Drivn - Frontend
 
 This is the frontend of the Uber Application, providing a seamless and user-friendly interface for booking rides, tracking drivers, and managing user accounts.
 
