@@ -53,16 +53,16 @@ async function handleCaptainSignup(req, res) {
 
         const newCaptain = await Captain.create({
             fullname: {
-                firstname: body.fullname.firstname,
-                lastname: body.fullname.lastname
+                firstname: body.firstname,
+                lastname: body.lastname
             },
             email: body.email,
             password: hashedPassword,
             vehicle: {
-                color: body.vehicle.color,
-                vehicleNumber: body.vehicle.vehicleNumber,
-                capacity: body.vehicle.capacity,
-                vehicleType: body.vehicle.vehicleType
+                color: body.color,
+                vehicleNumber: body.vehicleNumber,
+                capacity: body.capacity,
+                vehicleType: body.vehicleType
             }
         })
 
