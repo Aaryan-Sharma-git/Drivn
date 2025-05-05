@@ -6,6 +6,7 @@ function DoubleTracking({ destination }) {
   const [origin, setOrigin] = useState(null);
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [Destination, setDestination] = useState(destination);
+  const [triggerRender, setTriggerRender] = useState(1);
 
   // Load Google Maps script
   useEffect(() => {
@@ -44,7 +45,10 @@ function DoubleTracking({ destination }) {
 
   // Initialize map and directions
   useEffect(() => {
-    if (!isScriptLoaded || !origin || !destination) return;
+    if (!isScriptLoaded || !origin || !destination) {
+      setTriggerRender(prev => prev + 1)
+      return;
+    };
 
     const directionsService = new window.google.maps.DirectionsService();
     const directionsRenderer = new window.google.maps.DirectionsRenderer();

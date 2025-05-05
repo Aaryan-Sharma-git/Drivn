@@ -5,6 +5,7 @@ function SingleTracking() {
   const mapRef = useRef(null);
   const [origin, setOrigin] = useState(null);
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
+  const [triggerRender, setTriggerRender] = useState(1);
 
   // Load Google Maps script
   useEffect(() => {
@@ -43,7 +44,10 @@ function SingleTracking() {
 
   // Initialize map and marker
   useEffect(() => {
-    if (!isScriptLoaded || !origin) return;
+    if (!isScriptLoaded || !origin) {
+      setTriggerRender(prev => prev + 1);
+      return;
+    };
 
     async function initMap() {
       const { Map } = await window.google.maps.importLibrary("maps");
