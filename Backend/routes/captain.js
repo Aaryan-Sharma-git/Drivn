@@ -1,11 +1,12 @@
 const express = require('express');
 const captainRouter = express.Router();
-const {body} = require('express-validator');
+const {body, query} = require('express-validator');
 const {
     handleCaptainLogin,
     handleCaptainLogout,
     handleCaptainSignup,
-    getCaptainProfile
+    getCaptainProfile,
+    getCaptainCoordinates
 } = require('../controllers/captainController');
 const {
     checkCaptainAuthentication
@@ -22,6 +23,7 @@ captainRouter
             body('vehicleNumber').notEmpty().isLength({ min: 3 }).withMessage('Vehicle Number must contain atleast 3 characters'),
             body('capacity').notEmpty().isInt({ min: 1 }).withMessage('Capacity must be atleast 1'),
             body('vehicleType').notEmpty().isIn(['car', 'bike', 'auto']).withMessage('Invalid Vehicle Type'),
+            body('phoneNumber').notEmpty().withMessage('phone number is required').matches(/^\+\d{1,4}-\d{7,12}$/).withMessage('Phone number must follow this pattern +91-XXXXXXXXXX.'),
 handleCaptainSignup);
 
 captainRouter
@@ -34,5 +36,8 @@ captainRouter
 
 captainRouter
 .get('/logout', checkCaptainAuthentication, handleCaptainLogout);
+
+captainRouter
+.get('/get-captain-location', query('captainId').notEmpty().withMessage('CaptainID is not present')  , checkCaptainAuthentication, getCaptainCoordinates)
 
 module.exports = captainRouter;

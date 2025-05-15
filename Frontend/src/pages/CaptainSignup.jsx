@@ -10,8 +10,9 @@ const CaptainSignup = () => {
       const [Password, setPassword] = useState('');
       const [Firstname, setFirstname] = useState('');
       const [Lastname, setLastname] = useState('');
+      const [phoneNumber, setPhoneNumber] = useState('');
       const [file, setFile] = useState(null);
-      const {captain, setCaptain} = useContext(captainContext);
+      const {Captain, setCaptain} = useContext(captainContext);
 
       const [Color, setColor] = useState('');
       const [VehicleNumber, setVehicleNumber] = useState('');
@@ -38,6 +39,10 @@ const CaptainSignup = () => {
     
       const handleCaptainPassword = (e) => {
         setPassword(e.target.value);
+      }
+
+      const handlePhoneNumber = (e) => {
+        setPhoneNumber(e.target.value);
       }
 
       const handleVehicleColor = (e) => {
@@ -74,6 +79,7 @@ const CaptainSignup = () => {
         formData.append('vehicleNumber', VehicleNumber);
         formData.append('capacity', Capacity);
         formData.append('vehicleType', VehicleType);
+        formData.append('phoneNumber', phoneNumber);
 
 
         try {
@@ -97,6 +103,7 @@ const CaptainSignup = () => {
             setVehicleNumber('');
             setCapacity('');
             setVehicleType('default');
+            setPhoneNumber('')
   
             console.log('Registration successful!');
           }
@@ -154,6 +161,13 @@ const CaptainSignup = () => {
                 <input className='bg-gray-200 px-6 py-4 rounded-md placeholder:text-md' value={Password} onChange={(e) => {
                   handleCaptainPassword(e);    
                 }} type="password" name="userPassword" id="userPassword"  placeholder='Password'/>
+              </div>
+
+              <div className='flex flex-col gap-2.5'>
+                <label className='text-lg' htmlFor="phoneNumber">Enter your phone number</label>
+                <input className='bg-gray-200 px-6 py-4 rounded-md placeholder:text-md' value={phoneNumber} onChange={(e) => {
+                  handlePhoneNumber(e);    
+                }} type='tel' name="phoneNumber" id="phoneNumber"  placeholder='+91-XXXXXXXXXX' pattern="^\+\d{1,4}-\d{7,12}$" required/>
               </div>
 
               <div className='flex flex-col gap-2.5'>

@@ -39,7 +39,8 @@ async function handleCaptainSignup(req, res) {
                     vehicleNumber: body.vehicleNumber,
                     capacity: body.capacity,
                     vehicleType: body.vehicleType
-                }
+                },
+                phoneNumber: body.phoneNumber
             })
 
             const captainToken = setToken(newCaptain);
@@ -63,7 +64,8 @@ async function handleCaptainSignup(req, res) {
                 vehicleNumber: body.vehicleNumber,
                 capacity: body.capacity,
                 vehicleType: body.vehicleType
-            }
+            },
+            phoneNumber: body.phoneNumber
         })
 
         const captainToken = setToken(newCaptain);
@@ -131,9 +133,34 @@ async function getCaptainProfile(req, res) {
     });
 }
 
+async function getCaptainCoordinates(req, res) {
+    const result = validationResult(req);
+
+    try {
+        const captainId = req.query.captainId;
+
+        const captain = await Captain.findById(captainId);
+
+        const coordinates = captain.location.coordinates; 
+
+        return res.status(200).json({
+            lat: coordinates[1],
+            lng: coordinates[0]
+        })
+
+    } catch (error) {
+        console.log(error);
+    }
+
+    return res.status(400).send({
+        errors: result.array()
+    });
+}
+
 module.exports = {
     handleCaptainLogin,
     handleCaptainSignup,
     handleCaptainLogout,
-    getCaptainProfile
+    getCaptainProfile,
+    getCaptainCoordinates
 }

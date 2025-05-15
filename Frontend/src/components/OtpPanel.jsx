@@ -24,8 +24,6 @@ const OtpPanel = ({otpPanel, ride}) => {
         withCredentials: true
       });
 
-      console.log(response);
-
       if(response.status === 200){
         navigate('/captain-destination', {
           state: {
@@ -38,22 +36,20 @@ const OtpPanel = ({otpPanel, ride}) => {
       }
     } catch (error) {
       console.log('enter a valid otp')
-    }
-    
+    }  
   }
 
   return (
-    <div className='relative w-full h-full flex flex-col justify-start py-40 gap-10'>
-      <p className='text-2xl text-center font-bold'>Enter OTP sent to the passenger</p>
-
-      {otpPanel && <div className='w-full justify-center items-center'>
-        <OtpTextarea length={4} handleOtpSubmit={handleOtpSubmit}/>
-      </div>}
-      {errorBox && <div className='text-center text-red-600 text-md'>
-        Invalid OTP. Please enter the correct OTP again.
-      </div>}
-      
-
+    <div className="w-full h-full flex flex-col justify-start gap-6 z-20 overflow-auto">
+      <p className="text-2xl text-center font-bold">Enter OTP sent to the passenger</p>
+        <div className="w-full flex justify-center items-center">
+          <OtpTextarea length={4} handleOtpSubmit={handleOtpSubmit} />
+        </div>
+      {errorBox && (
+        <div className="text-center text-red-600 text-md">
+          Invalid OTP. Please enter the correct OTP again.
+        </div>
+      )}
     </div>
   )
 }

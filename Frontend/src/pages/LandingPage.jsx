@@ -211,9 +211,10 @@ const LandingPage = () => {
 
   socket.on('confirm-popup', (ride) => {
     setRide(ride);
-
+    navigate('/captain-found-page', {state: {ride: ride,
+      chosenVehicle: chosenVehicle
+    }});
     setWaitingForDriverPanelOpen(false);
-    setDriverFoundPanelOpen(true);
   });
 
   socket.on('otp-verified', (ride) => {

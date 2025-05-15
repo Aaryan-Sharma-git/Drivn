@@ -33,7 +33,8 @@ async function handleUserSignUp(req, res) {
                     lastname: body.lastname
                 },
                 email: body.email,
-                password: hashedPassword
+                password: hashedPassword,
+                phoneNumber: body.phoneNumber
             })
 
             const userToken = setToken(newUser);
@@ -51,7 +52,8 @@ async function handleUserSignUp(req, res) {
                 lastname: body.lastname
             },
             email: body.email,
-            password: hashedPassword
+            password: hashedPassword,
+            phoneNumber: body.phoneNumber
         })
 
         const userToken = setToken(newUser);

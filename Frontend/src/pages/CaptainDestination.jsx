@@ -61,7 +61,6 @@ const CaptainDestination = () => {
   return (
     <div className='w-full h-full flex flex-col overflow-hidden relative'>
         <div className='w-full flex-1 relative'>
-            <Link to='/captain-landing-page' className='absolute flex justify-center items-center bg-white w-[50px] h-[50px] rounded-full left-4 bottom-4 z-10'><i className="ri-home-4-line text-xl"></i></Link>
             {destinationCoords && <DoubleTracking destination={destinationCoords}/>}
         </div>
         <div className=' w-full p-6 relative flex flex-col gap-4 justify-evenly items-center bg-amber-400'>
@@ -88,7 +87,7 @@ const CaptainDestination = () => {
           <div className='absolute w-full flex justify-center items-center top-0' onClick={() => {
             setCompletePanel(false)
           }}><i className="ri-arrow-down-wide-fill text-4xl text-gray-600"></i></div>
-            <CompleteRide ride={ride}/>
+            {completePanel && <CompleteRide ride={ride}/>}
         </div>
 
     </div>

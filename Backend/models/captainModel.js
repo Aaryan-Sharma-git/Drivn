@@ -89,6 +89,11 @@ const captainSchema = new mongoose.Schema({
         }
     },
 
+    phoneNumber: {
+        type: String,
+        required: true
+    },
+
     location: {
         type: {
             type: String,

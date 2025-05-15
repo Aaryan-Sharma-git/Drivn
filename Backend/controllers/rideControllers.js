@@ -119,7 +119,7 @@ async function handleConfirmPopup(req, res) {
 
             return res.status(200).json({
                 msg: 'ride confirmed and driver found',
-                ride: ride
+                ride: userCaptainPopulatedRide
             })
 
         
@@ -161,6 +161,53 @@ async function handleVerifyOtp(req, res) {
 
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    return res.status(400).send({
+        error: result.array()
+    })
+}
+
+async function handleCancelRide(req, res) {
+    const result = validationResult(req);
+    const io = getSocketInstance();
+
+    if(result.isEmpty()){
+        const rideId = req.query.rideId;
+        const userType = req.query.userType;
+
+        try {
+            const rideCancelled = await Ride.findByIdAndUpdate(rideId, {
+                status: 'cancelled'
+            })
+
+            const captainInactive = await Captain.findByIdAndUpdate(rideCancelled.captain, {
+                status: 'InActive'
+            })
+
+            const populatedRide = await Ride.findById(rideId).populate('user').populate('captain');
+
+            if(io){
+                if(userType === 'user'){
+                    io.to(populatedRide.captain.socketId).emit('user-cancelled-ride', {
+                        msg: 'ride cancelled by user.'
+                    })
+                }
+
+                else{
+                    io.to(populatedRide.user.socketId).emit('captain-cancelled-ride', {
+                        msg: 'ride cancelled by captain.'
+                    })
+                }
+            }
+
+            return res.status(200).json({
+                msg: 'ride was successfully cancelled',
+            })
+
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -219,5 +266,6 @@ module.exports = {
     handleRideFare,
     handleConfirmPopup,
     handleVerifyOtp,
-    handleCompleteRide
+    handleCompleteRide,
+    handleCancelRide
 }

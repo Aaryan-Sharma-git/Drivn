@@ -10,6 +10,7 @@ const UserSignup = () => {
     const [Password, setPassword] = useState('');
     const [Firstname, setFirstname] = useState('');
     const [Lastname, setLastname] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [file, setFile] = useState(null);
     const {User, setUser} = useContext(userContext);
     const navigate = useNavigate();
@@ -24,6 +25,10 @@ const UserSignup = () => {
 
     const handleUserLastname = (e) => {
       setLastname(e.target.value);
+    }
+
+    const handlePhoneNumber = (e) => {
+      setPhoneNumber(e.target.value);
     }
   
     const handleUserEmail = (e) => {
@@ -43,6 +48,8 @@ const UserSignup = () => {
       formData.append('email', Email);
       formData.append('password', Password);
       formData.append('profilePic', file);
+      formData.append('phoneNumber', phoneNumber);
+
 
       try {
         const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users`, formData, {
@@ -61,6 +68,7 @@ const UserSignup = () => {
           setLastname('');
           setEmail('');
           setPassword('');
+          setPhoneNumber('');
 
           console.log('Registration successful!');
         }
@@ -105,6 +113,13 @@ const UserSignup = () => {
                     handleUserLastname(e);
                   }} type="text" name="lastname" id="lastname" placeholder='Lastname'/>
                 </div>
+              </div>
+
+              <div className='flex flex-col gap-2.5'>
+                <label className='text-lg' htmlFor="phoneNumber">Enter your phone number</label>
+                <input className='bg-gray-200 px-6 py-4 rounded-md placeholder:text-md' value={phoneNumber} onChange={(e) => {
+                  handlePhoneNumber(e);    
+                }} type='tel' name="phoneNumber" id="phoneNumber"  placeholder='+91-XXXXXXXXXX' pattern="^\+\d{1,4}-\d{7,12}$" required/>
               </div>
 
               <div className='flex flex-col gap-2.5'>

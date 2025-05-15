@@ -24,6 +24,7 @@ function initializeServer(server){
                 else{
                     const captain = await Captain.findByIdAndUpdate(data.captainId, {socketId: socket.id});
                 }
+    
             })
         
             socket.on('update-captain-location', async (data) => {
@@ -40,7 +41,22 @@ function initializeServer(server){
                     console.error("Error updating captain location:", error);
                 }
             });
+
+            socket.on('send-message', (response) => {
+                io.to(response.toSocket).emit('recieve-message', response.msg);
+            })
+
+            socket.on('socketId-to-captain', async (message) => {
+                const captain = await Captain.findById(message.captainId);
+
+                io.to(captain.socketId).emit('socketId-to-captain-from-server', message.socketId)
+            })  
             
+            socket.on('socketId-to-user', async (message) => {
+                const user = await User.findById(message.userId);
+
+                io.to(user.socketId).emit('socketId-to-user-from-server', message.socketId)
+            })
         })
     }
 }

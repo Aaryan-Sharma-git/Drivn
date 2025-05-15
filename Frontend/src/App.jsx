@@ -17,6 +17,7 @@ import CaptainLogout from './pages/CaptainLogout';
 import Riding from './pages/Riding';
 import CaptainPickup from './pages/CaptainPickup';
 import CaptainDestination from './pages/CaptainDestination';
+import UserFindsDriver from './pages/UserFindsDriver';
 
 const router = createBrowserRouter([
   {
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
   {
     path: '/captain-destination',
     element: <CaptainDestination/>
+  },
+  {
+    path: '/captain-found-page',
+    element: <UserFindsDriver/>
   }
 ]);
 

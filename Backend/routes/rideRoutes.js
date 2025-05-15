@@ -1,6 +1,6 @@
 const express = require('express');
 const {body, query} = require('express-validator');
-const {handleRideCreate, handleRideFare, handleConfirmPopup, handleVerifyOtp, handleCompleteRide} = require('../controllers/rideControllers')
+const {handleRideCreate, handleRideFare, handleConfirmPopup, handleVerifyOtp, handleCompleteRide, handleCancelRide} = require('../controllers/rideControllers')
 
 const rideRouter = express.Router();
 
@@ -14,7 +14,10 @@ rideRouter
 .post('/confirm-popup', body('captainId').isMongoId().withMessage('invalid Id'), body('rideId').isMongoId().withMessage('invalid Id'), handleConfirmPopup);
 
 rideRouter
-.post('/verify-otp', body('otp').isLength({min: 4}).withMessage('Invalid otp'), handleVerifyOtp)
+.post('/verify-otp', body('otp').isLength({min: 4}).withMessage('Invalid otp'), handleVerifyOtp);
+
+rideRouter
+.get('/cancel-ride', query('rideId').isMongoId().withMessage('Invalid rideId provided.'), query('userType').isIn(['user', 'captain']).withMessage('invalid userType.'), handleCancelRide)
 
 rideRouter
 .post('/complete-ride', body('ride').notEmpty().withMessage('ride is absent'), handleCompleteRide)

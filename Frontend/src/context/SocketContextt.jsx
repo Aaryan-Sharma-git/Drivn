@@ -1,35 +1,31 @@
-import React, { createContext, useContext, useEffect } from 'react'
-import { io } from "socket.io-client";
+// SocketContext.jsx
+import { createContext, useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
 
-const socketContext = createContext();
+export const socketContext = createContext();
 
-const socket = io(import.meta.env.VITE_BASE_URL, {
-  withCredentials: true
-});
+const SocketProvider = ({ children }) => {
+  const [socket, setSocket] = useState(null);
 
-const SocketContext = ({children}) => {
+  useEffect(() => {
+    const newSocket = io(import.meta.env.VITE_BASE_URL, {
+      withCredentials: true,
+      reconnection: true,
+      reconnectionAttempts: Infinity,
+      reconnectionDelay: 1000,
+    });
+    setSocket(newSocket);
 
-    useEffect(() => {
-
-      socket.on('connect', () => {
-        console.log(`${socket.id} connected to server`);
-      });
-
-      socket.on('disconnect', () => {
-        console.log(`${socket.id} disconnected from server`);
-      })
-
-    }, []);
-
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
 
   return (
-    <div>
-        <socketContext.Provider value = {{socket}}>
-            {children}
-        </socketContext.Provider>
-    </div>
-  )
-}
+    <socketContext.Provider value={{ socket }}>
+      {children}
+    </socketContext.Provider>
+  );
+};
 
-export default SocketContext
-export {socketContext}  
+export default SocketProvider;
